@@ -1,10 +1,5 @@
 # Study Planner
 
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?logo=bootstrap&logoColor=white)
-![JSON Server](https://img.shields.io/badge/JSON%20Server-0.17.4-lightgrey)
-
 A single-page React application that helps students plan their studies subject by subject. Users create subjects, add tasks under them with a due date and priority, mark tasks as done, and edit or delete anything that changes. Data is served through a local JSON Server REST API.
 
 ## Table of Contents
@@ -77,8 +72,8 @@ npm -v
 ## Getting Started
 
 ```bash
-# 1. Clone the repository (or unzip the project) and move into it
-git clone <your-repository-url>
+# 1. Clone the repository 
+git clone https://github.com/Roshni13102007/StudyPlanner.git
 cd study-planner
 
 # 2. Install dependencies
@@ -91,7 +86,7 @@ npm start
 Then open:
 
 - **App:** http://localhost:5173
-- **API:** http://localhost:3001 (for example http://localhost:3001/tasks)
+- **API:** http://localhost:3001 
 
 Press `Ctrl+C` in the terminal to stop both.
 
@@ -130,14 +125,6 @@ Base URL: `http://localhost:3001`
 | PUT | `/tasks/:id` | Replace a task (edit) |
 | PATCH | `/tasks/:id` | Update selected fields, for example `{ "done": true }` |
 | DELETE | `/tasks/:id` | Delete a task |
-
-Example request:
-
-```bash
-curl -X POST http://localhost:3001/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"subjectId":1,"title":"Revise normalisation","dueDate":"2026-11-02","priority":"High","done":false}'
-```
 
 ## Data Model
 
@@ -215,7 +202,3 @@ study-planner/
 - Add reminders for tasks that are due soon.
 - Add server-side validation and automated tests.
 
-## Author
-
-**[Your Name]**, [Student ID]
-[Course / Lab / Batch]
