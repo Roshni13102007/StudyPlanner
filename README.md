@@ -201,4 +201,4 @@ study-planner/
 - Add user accounts so each student has a private plan.
 - Add reminders for tasks that are due soon.
 - Add server-side validation and automated tests.
-
+- Add more elements to make to attractive using UI and UX design.
