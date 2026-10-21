@@ -1,0 +1,221 @@
+# Study Planner
+
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?logo=bootstrap&logoColor=white)
+![JSON Server](https://img.shields.io/badge/JSON%20Server-0.17.4-lightgrey)
+
+A single-page React application that helps students plan their studies subject by subject. Users create subjects, add tasks under them with a due date and priority, mark tasks as done, and edit or delete anything that changes. Data is served through a local JSON Server REST API.
+
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [How It Works](#how-it-works)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [Configuration](#configuration)
+- [API Reference](#api-reference)
+- [Data Model](#data-model)
+- [Project Structure](#project-structure)
+- [Validation Rules](#validation-rules)
+- [Troubleshooting](#troubleshooting)
+- [Known Limitations](#known-limitations)
+- [Future Improvements](#future-improvements)
+- [Author](#author)
+
+## Features
+
+- **Subjects (CRUD):** add, rename, recolour and delete subjects. Deleting a subject also deletes its tasks.
+- **Tasks (CRUD):** add, edit, delete and mark tasks as done.
+- **Smart list:** tasks are sorted by due date, with search, a status filter (all, open, done) and a per-subject filter.
+- **Overdue highlighting:** open tasks past their due date are shown in red.
+- **Form validation:** clear inline messages for invalid or missing input.
+- **Error handling:** a dismissible alert appears if the API cannot be reached or a request fails.
+- **Responsive layout:** works on desktop and mobile screen sizes.
+- **Accessible controls:** labelled form fields and ARIA labels on icon-like controls.
+
+## Tech Stack
+
+| Technology | Role |
+| --- | --- |
+| React 18 | Component-based UI with props, state and controlled forms |
+| Vite | Development server and build tool |
+| Bootstrap 5 | Responsive grid, form controls, validation styles, alerts |
+| Custom CSS | Colour palette, typography, task and priority styling |
+| JavaScript (ES modules) | Event handling, validation, sorting and filtering, `fetch` calls |
+| JSON Server 0.17.4 | Mock REST API served from `db.json` |
+
+## How It Works
+
+```
+React components  -->  api.js (fetch)  -->  JSON Server (port 3001)  -->  db.json
+       ^                                              |
+       +------------- updated state <-- JSON response +
+```
+
+1. A user action, such as submitting the task form, calls a handler in `App.jsx`.
+2. The handler calls a function in `src/api.js`, which sends an HTTP request.
+3. JSON Server updates `db.json` and returns the saved record.
+4. The handler updates React state with the response, and the interface re-renders.
+
+State is only updated after the server confirms a change, so the screen always matches the data file.
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org) 18 or newer
+- npm (installed with Node.js)
+
+Check your versions:
+
+```bash
+node -v
+npm -v
+```
+
+## Getting Started
+
+```bash
+# 1. Clone the repository (or unzip the project) and move into it
+git clone <your-repository-url>
+cd study-planner
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the API and the React app together
+npm start
+```
+
+Then open:
+
+- **App:** http://localhost:5173
+- **API:** http://localhost:3001 (for example http://localhost:3001/tasks)
+
+Press `Ctrl+C` in the terminal to stop both.
+
+## Available Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm start` | Runs JSON Server and the Vite dev server together |
+| `npm run dev` | Runs only the React app (port 5173) |
+| `npm run server` | Runs only JSON Server (port 3001) |
+| `npm run build` | Creates a production build in `dist/` |
+| `npm run preview` | Serves the production build locally |
+
+## Configuration
+
+The API base URL defaults to `http://localhost:3001`. To change it, create a `.env` file in the project root:
+
+```
+VITE_API_URL=http://localhost:3001
+```
+
+Do not store passwords, API keys or tokens in this file or anywhere in the repository. This project does not need any.
+
+## API Reference
+
+Base URL: `http://localhost:3001`
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/subjects` | List all subjects |
+| POST | `/subjects` | Create a subject |
+| PUT | `/subjects/:id` | Replace a subject (edit) |
+| DELETE | `/subjects/:id?_dependent=tasks` | Delete a subject and its tasks |
+| GET | `/tasks` | List all tasks |
+| POST | `/tasks` | Create a task |
+| PUT | `/tasks/:id` | Replace a task (edit) |
+| PATCH | `/tasks/:id` | Update selected fields, for example `{ "done": true }` |
+| DELETE | `/tasks/:id` | Delete a task |
+
+Example request:
+
+```bash
+curl -X POST http://localhost:3001/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"subjectId":1,"title":"Revise normalisation","dueDate":"2026-11-02","priority":"High","done":false}'
+```
+
+## Data Model
+
+**subjects**
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| id | number | Primary key, generated by JSON Server |
+| name | string | Unique, at least 2 characters |
+| color | string | Hex colour, for example `#0f766e` |
+
+**tasks**
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| id | number | Primary key, generated by JSON Server |
+| subjectId | number | Foreign key referencing `subjects.id` |
+| title | string | At least 3 characters |
+| dueDate | string | ISO date, `YYYY-MM-DD` |
+| priority | string | `Low`, `Medium` or `High` |
+| done | boolean | Completion status |
+
+**Relationship:** one subject has many tasks (one-to-many).
+
+## Project Structure
+
+```
+study-planner/
+├── db.json                     Mock database (subjects, tasks)
+├── index.html                  HTML entry page
+├── package.json                Dependencies and scripts
+├── vite.config.js              Vite configuration
+├── README.md
+└── src/
+    ├── main.jsx                App entry point
+    ├── App.jsx                 State, handlers and page layout
+    ├── api.js                  All fetch calls to the API
+    ├── styles.css              Custom styles
+    └── components/
+        ├── SubjectPanel.jsx    Subject list and add/edit/delete form
+        ├── TaskForm.jsx        Add and edit task form with validation
+        ├── TaskList.jsx        Search, filter and sorted list
+        └── TaskItem.jsx        A single task row
+```
+
+## Validation Rules
+
+| Field | Rule |
+| --- | --- |
+| Subject name | At least 2 characters; must be unique (case-insensitive) |
+| Task title | At least 3 characters |
+| Task subject | Required |
+| Task due date | Required |
+
+## Troubleshooting
+
+| Problem | Fix |
+| --- | --- |
+| "Could not reach the server" message | JSON Server is not running. Use `npm start`, or run `npm run server` in a second terminal. |
+| "Port already in use" | Another process is using port 3001 or 5173. Stop it, or close older terminals running this project. |
+| Blank page | Open the browser console and check the error. Confirm `npm install` finished without errors. |
+| `command not found: npm` | Install Node.js from nodejs.org and reopen the terminal. |
+
+## Known Limitations
+
+- The data is mock and local. There is no authentication, no server-side validation and no production-level persistence.
+- Validation runs in the browser only.
+- Overdue status uses the current date on the user's device.
+- All users of the same running server share the same `db.json`.
+
+## Future Improvements
+
+- Replace JSON Server with a Spring Boot backend and a MySQL or PostgreSQL database.
+- Add user accounts so each student has a private plan.
+- Add reminders for tasks that are due soon.
+- Add server-side validation and automated tests.
+
+## Author
+
+**[Your Name]**, [Student ID]
+[Course / Lab / Batch]

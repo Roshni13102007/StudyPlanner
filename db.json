@@ -1,0 +1,45 @@
+{
+  "subjects": [
+    {
+      "id": 1,
+      "name": "DBMS",
+      "color": "#0f766e"
+    },
+    {
+      "id": 3,
+      "name": "Data Structures",
+      "color": "#b45309"
+    },
+    {
+      "name": "java",
+      "color": "#0f766e",
+      "id": 4
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "subjectId": 1,
+      "title": "Revise ER diagrams and keys",
+      "dueDate": "2026-10-24",
+      "priority": "High",
+      "done": false
+    },
+    {
+      "id": 3,
+      "subjectId": 3,
+      "title": "Solve 5 linked list problems",
+      "dueDate": "2026-10-22",
+      "priority": "Medium",
+      "done": true
+    },
+    {
+      "title": "complete cw",
+      "subjectId": 4,
+      "dueDate": "2026-10-29",
+      "priority": "Medium",
+      "done": false,
+      "id": 4
+    }
+  ]
+}
