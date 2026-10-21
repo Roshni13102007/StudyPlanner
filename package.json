@@ -8,7 +8,8 @@
     "server": "json-server --watch db.json --port 3001",
     "start": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "api": "json-server --host 0.0.0.0 --port ${PORT:-3001} db.json"
   },
   "dependencies": {
     "bootstrap": "5.3.3",
